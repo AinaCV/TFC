@@ -16,11 +16,11 @@ public class NPC : MonoBehaviour
 
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E) && playerIsClose)
+        if(Input.GetKeyDown(KeyCode.E) && playerIsClose ||  Input.GetMouseButtonDown(0) && playerIsClose)
         {
             if(dialoguePanel.activeInHierarchy)
             {
-                NextLine(); //para que con la e misma pueda pasar al siguiente texto
+                NextLine(); 
             }
             else
             {
@@ -28,10 +28,6 @@ public class NPC : MonoBehaviour
                 StartCoroutine(Typing());
             }
         }
-
-        //if (Input.GetKeyDown(KeyCode.KeypadEnter) && dialoguePanel.activeInHierarchy) {
-        //    NextLine();
-        //}
 
         if (dialogueText.text == dialogue[index])
         {
@@ -46,7 +42,7 @@ public class NPC : MonoBehaviour
         dialoguePanel.SetActive(false);
     }
 
-    IEnumerator Typing() //crea la velocidad del texto para que parezca que el dialogo esta siendo escrito
+    IEnumerator Typing() //para que aparezca el dialogo a una velocidad de escritura normal
     {
         foreach(char letter in dialogue[index].ToCharArray())
         {
@@ -58,7 +54,7 @@ public class NPC : MonoBehaviour
     public void NextLine()
     {
         contButton.SetActive(false);
-        StopAllCoroutines(); //Para parar las corrutinas para que ambos textos no se bugueen y aparezcan a la vez
+        StopAllCoroutines(); //Para bug en corrutinas de ambos textos a la vez
 
         if(index < dialogue.Length - 1)
         {
