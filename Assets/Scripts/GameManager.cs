@@ -1,6 +1,6 @@
+using SaveLoadSystem;
 using System.Collections;
 using System.Collections.Generic;
-using SaveLoadSystem;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -51,21 +51,18 @@ public class GameManager : MonoBehaviour
     public void SaveGameData()
     {
         playerData.position = GetPlayerPosition();
-        playerData.inventoryData = inventory.GetInventoryData();
-        playerData.decisionData = decisionManager.GetDecisionData();
+        playerData.inventory = inventory.GetInventoryData();
+        playerData.decisions = decisionManager.GetDecisionData();
 
-        SaveGameManager.currentSaveData = playerData;
-        SaveGameManager.Save();
+        SaveLoadManager.Save(playerData);
     }
 
     public void LoadGameData()
     {
-        SaveGameManager.Load();
-        playerData = SaveGameManager.currentSaveData;
+        playerData = SaveLoadManager.Load();
 
-        inventory.SetInventoryData(playerData.inventoryData);
-        decisionManager.SetDecisionData(playerData.decisionData);
-
+        inventory.SetInventoryData(playerData.inventory, null);
+        DecisionManager.SetDecisionData(playerData.decisions);
         if (playerData.position != null)
         {
             SetPlayerPosition(playerData.position);
@@ -96,8 +93,7 @@ public class GameManager : MonoBehaviour
         playerData = new PlayerData();
         inventory.ResetInventory();
         decisionManager.ResetDecisions();
-        SaveGameManager.currentSaveData = playerData;
-        SaveGameManager.Save();
+        SaveLoadManager.Save(playerData);
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 

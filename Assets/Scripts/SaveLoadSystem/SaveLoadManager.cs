@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace SaveLoadSystem
 {
-    public static class SaveLoadSystem
+    public static class SaveLoadManager
     {
         public static PlayerData currentSaveData = new PlayerData();
         public const string SaveDirectory = "/SaveData";

@@ -48,4 +48,18 @@ public class DecisionManager
 
         return 0;
     }
+
+    public List<DecisionData> GetDecisionData()
+    {
+        return decisionData.decisions;
+    }
+    public static void SetDecisionData(List<DecisionData> decisionDataList)
+    {
+        decisionData.decisions = decisionDataList;
+    }
+
+    public void ResetDecisions()
+    {
+        decisionData.decisions.Clear();
+    }
 }

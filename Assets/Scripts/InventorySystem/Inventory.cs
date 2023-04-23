@@ -6,6 +6,7 @@ using UnityEngine;
 public class Inventory
 {
     public List<Item> items = new List<Item>();
+    public List<InventorySlot> inventorySlots = new List<InventorySlot>();
 
     public void AddItem(Item item)
     {
@@ -38,5 +39,44 @@ public class Inventory
     public void Clear()
     {
         items.Clear();
+    }
+
+    public List<string> GetInventoryData()
+    {
+        List<string> itemNames = new List<string>();
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            if (slot.item != null)
+            {
+                itemNames.Add(slot.item.itemName);
+            }
+            else
+            {
+                itemNames.Add("");
+            }
+        }
+        return itemNames;
+    }
+
+    public void SetInventoryData(List<string> itemNames, List<Item> itemList)
+    {
+        for (int i = 0; i < inventorySlots.Count; i++)
+        {
+            if (itemNames[i] != "")
+            {
+                InventorySlot slot = inventorySlots[i];
+                slot.item = Item.GetItem(itemNames[i], itemList);
+                slot.UpdateSlotUI();
+            }
+        }
+    }
+
+    public void ResetInventory()
+    {
+        foreach (InventorySlot slot in inventorySlots)
+        {
+            slot.item = null;
+            slot.UpdateSlotUI();
+        }
     }
 }
