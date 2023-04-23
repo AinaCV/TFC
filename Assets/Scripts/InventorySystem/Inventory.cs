@@ -5,25 +5,25 @@ using UnityEngine;
 [System.Serializable]
 public class Inventory
 {
-    public List<Item> items = new List<Item>();
-    public List<InventorySlot> inventorySlots = new List<InventorySlot>();
+    public List<Item> items = new List<Item>(); // Lista de items en el inventario
+    public List<InventorySlot> inventorySlots = new List<InventorySlot>(); //Lista de los slots disponibles
 
-    public void AddItem(Item item)
+    public void AddItem(Item item) // Añade
     {
         items.Add(item);
     }
 
-    public void RemoveItem(Item item)
+    public void RemoveItem(Item item) // Quita
     {
         items.Remove(item);
     }
 
-    public bool HasItem(Item item)
+    public bool HasItem(Item item) // Comprueba si un item está en el inventario
     {
         return items.Contains(item);
     }
 
-    public int GetItemCount(Item item)
+    public int GetItemCount(Item item) // Obtiene la cantidad de un item en el inventario
     {
         int count = 0;
         for (int i = 0; i < items.Count; i++)
@@ -36,19 +36,19 @@ public class Inventory
         return count;
     }
 
-    public void Clear()
+    public void Clear() // Limpia el inventario
     {
         items.Clear();
     }
 
-    public List<string> GetInventoryData()
+    public List<string> GetInventoryData() // Obtiene los datos del inventario en forma de una lista de strings
     {
         List<string> itemNames = new List<string>();
         foreach (InventorySlot slot in inventorySlots)
         {
             if (slot.item != null)
             {
-                itemNames.Add(slot.item.itemName);
+                itemNames.Add(slot.item.itemName); // Añade el nombre del item al inventario
             }
             else
             {
@@ -58,14 +58,14 @@ public class Inventory
         return itemNames;
     }
 
-    public void SetInventoryData(List<string> itemNames, List<Item> itemList)
+    public void SetInventoryData(List<string> itemNames, List<Item> itemList) // Establece los datos del inventario a partir de una lista de strings
     {
         for (int i = 0; i < inventorySlots.Count; i++)
         {
             if (itemNames[i] != "")
             {
                 InventorySlot slot = inventorySlots[i];
-                slot.item = Item.GetItem(itemNames[i], itemList);
+                slot.item = Item.GetItem(itemNames[i], itemList); // Obtiene el item a partir de su nombre
                 slot.UpdateSlotUI();
             }
         }

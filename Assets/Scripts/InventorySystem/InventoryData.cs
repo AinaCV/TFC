@@ -7,4 +7,3 @@ public class InventoryData : MonoBehaviour
     public Inventory inventory;
     public List<InventorySlot> inventorySlots;
 }
-

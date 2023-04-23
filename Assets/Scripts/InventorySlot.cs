@@ -15,4 +15,3 @@ public class InventorySlot
 
     // Otros métodos y propiedades de la clase InventorySlot
 }
-

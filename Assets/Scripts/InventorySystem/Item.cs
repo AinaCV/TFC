@@ -27,7 +27,6 @@ public class Item
                 return itemList[i];
             }
         }
-        // Si no se encontró el objeto Item, devuelve null
         return null;
     }
 }

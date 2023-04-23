@@ -4,10 +4,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance;
+    public static GameManager instance; // Instancia única del GameManager
 
     [Header("Player Data")]
     public PlayerData playerData;
@@ -41,7 +40,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (Input.GetKeyDown(KeyCode.Escape)) // Si se presiona la tecla "Escape", guarda los datos del juego y cierra la aplicación
         {
             SaveGameData();
             Application.Quit();
@@ -50,51 +49,54 @@ public class GameManager : MonoBehaviour
 
     public void SaveGameData()
     {
-        playerData.position = GetPlayerPosition();
-        playerData.inventory = inventory.GetInventoryData();
-        playerData.decisions = decisionManager.GetDecisionData();
+        playerData.position = GetPlayerPosition();//Obtiene la posición del jugador
+        playerData.inventory = inventory.GetInventoryData();  //Obtiene los datos del inventario
+        playerData.decisions = decisionManager.GetDecisionData(); //Obtiene las decisiones tomadas por el jugador
 
-        SaveLoadManager.Save(playerData);
+        SaveLoadManager.currentSaveData = playerData; //Guarda los datos del jugador en la clase SaveLoadManager
+        SaveLoadManager.Save();
     }
 
     public void LoadGameData()
     {
-        playerData = SaveLoadManager.Load();
+        SaveLoadManager.Load(); //Carga los datos del archivo de guardado
+        playerData = SaveLoadManager.currentSaveData; //Obtiene los datos del jugador SaveLoadManager
 
-        inventory.SetInventoryData(playerData.inventory, null);
-        DecisionManager.SetDecisionData(playerData.decisions);
-        if (playerData.position != null)
+        inventory.SetInventoryData(playerData.inventory, null); //Establece los datos del inventario
+        DecisionManager.SetDecisionData(playerData.decisions); //Establece las decisiones tomadas por el jugador
+        if (playerData.position != null) //Si se tienen los datos de la posición del jugador
         {
-            SetPlayerPosition(playerData.position);
+            SetPlayerPosition(playerData.position); //Establece la posición del jugador
         }
     }
 
     private Vector3 GetPlayerPosition()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
+        if (player != null) 
         {
-            return player.transform.position;
+            return player.transform.position; 
         }
-        return Vector3.zero;
+        return Vector3.zero; 
     }
 
     private void SetPlayerPosition(Vector3 position)
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null)
+        GameObject player = GameObject.FindGameObjectWithTag("Player"); 
+        if (player != null) 
         {
-            player.transform.position = position;
+            player.transform.position = position; 
         }
     }
 
     public void StartNewGame()
     {
-        playerData = new PlayerData();
-        inventory.ResetInventory();
-        decisionManager.ResetDecisions();
-        SaveLoadManager.Save(playerData);
-        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        playerData = new PlayerData(); //Crea nuevos datos del jugador
+        inventory.ResetInventory(); //Reinicia el inventario
+        decisionManager.ResetDecisions(); //Reinicia las decisiones tomadas
+        SaveLoadManager.currentSaveData = playerData; //Establece los nuevos datos del jugador en la clase SaveLoadManager
+        SaveLoadManager.Save(); //Guarda los nuevos datos del jugador en el archivo de guardado
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); //reinicia la escena actual
     }
 
     public void EndGame()

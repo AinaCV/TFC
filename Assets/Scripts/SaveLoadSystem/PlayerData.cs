@@ -8,7 +8,7 @@ namespace SaveLoadSystem
     {
         public List<string> inventory = new List<string>();
         public Vector3 position;
-        public string characterName;
+        //public string characterName;
         public List<DecisionData> decisions = new List<DecisionData>();
     }
 }
