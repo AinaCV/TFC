@@ -1,68 +1,75 @@
-using System.Collections;
+using SaveLoadSystem;
+using System;
 using System.Collections.Generic;
-using UnityEngine;
 
 [System.Serializable]
-public class DecisionData //los datos de una decision
-
+public class DecisionData
 {
-    public string decisionName;
-    public int decisionValue; // para determinar qué opciones están disponibles para el jugador más adelante en el juego,
-                              // qué diálogos pueden ser desbloqueados o cómo se desarrolla la historia en general
+    public string decisionID;
+    public bool isTaken;
+
+    public DecisionData(string id, bool taken)
+    {
+        decisionID = id;
+        isTaken = taken;
+    }
 }
 
 [System.Serializable]
-public class DecisionManagerData //datos del manager de decisiones
-
+public class DecisionManagerData
 {
     public List<DecisionData> decisions = new List<DecisionData>();
-}
 
-public class DecisionManager
-{
-    public static DecisionManagerData decisionData = new DecisionManagerData();
-
-    public static void AddDecision(string decisionName, int decisionValue) // Agrega una decision a la lista de decisiones. Si la decision ya existe, actualiza su valor.
+    public void MakeDecision(string decisionID)
     {
-        foreach (DecisionData decision in decisionData.decisions)
+        DecisionData decision = decisions.Find(d => d.decisionID == decisionID);
+        if (decision != null)
         {
-            if (decision.decisionName == decisionName)
-            {
-                decision.decisionValue = decisionValue;
-                return;
-            }
+            decision.isTaken = true;
         }
-
-        DecisionData newDecision = new DecisionData();
-        newDecision.decisionName = decisionName;
-        newDecision.decisionValue = decisionValue;
-        decisionData.decisions.Add(newDecision);
-    }
-
-    public static int GetDecisionValue(string decisionName)// Obtiene el valor asociado a una decision en particular
-    {
-        foreach (DecisionData decision in decisionData.decisions)
+        else
         {
-            if (decision.decisionName == decisionName)
-            {
-                return decision.decisionValue;
-            }
+            decisions.Add(new DecisionData(decisionID, true));
         }
-
-        return 0;
     }
 
-    public List<DecisionData> GetDecisionData()// Devuelve la lista de DecisionData
+    public bool CheckDecision(string decisionID)
     {
-        return decisionData.decisions;
-    }
-    public static void SetDecisionData(List<DecisionData> decisionDataList) // Establece la lista de DecisionData
-    {
-        decisionData.decisions = decisionDataList;
+        DecisionData decision = decisions.Find(d => d.decisionID == decisionID);
+        return decision != null && decision.isTaken;
     }
 
     public void ResetDecisions()
     {
-        decisionData.decisions.Clear();
+        foreach (DecisionData decision in decisions)
+        {
+            decision.isTaken = false;
+        }
+    }
+}
+
+public class DecisionManager
+{
+    private DecisionManagerData decisionManagerData;
+
+    public DecisionManager(PlayerData playerData)
+    {
+        decisionManagerData = new DecisionManagerData();
+        decisionManagerData.decisions = playerData.decisions;
+    }
+
+    public void MakeDecision(string decisionID)
+    {
+        decisionManagerData.MakeDecision(decisionID);
+    }
+
+    public bool CheckDecision(string decisionID)
+    {
+        return decisionManagerData.CheckDecision(decisionID);
+    }
+
+    public void ResetDecisions()
+    {
+        decisionManagerData.ResetDecisions();
     }
 }

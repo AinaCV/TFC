@@ -1,6 +1,4 @@
 using SaveLoadSystem;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -15,25 +13,28 @@ public class GameManager : MonoBehaviour
     public Inventory inventory;
 
     [Header("Decision Manager")]
-    public DecisionManager decisionManager = new DecisionManager();
+    public DecisionManager decisionManager;
 
     [Header("Dialog Manager")]
     public DialogueManager dialogueManager;
 
     [Header("Action Manager")]
-    public Action actionManager;
+    public ActionManager actionManager;
 
     private void Awake()
     {
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(this.gameObject);
+            DontDestroyOnLoad(gameObject);
         }
         else
         {
-            Destroy(this.gameObject);
+            Destroy(gameObject);
         }
+
+        decisionManager = new DecisionManager();
+        actionManager = new ActionManager();
     }
 
     private void Start()
@@ -43,7 +44,7 @@ public class GameManager : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape)) // Si se presiona la tecla "Escape", guarda los datos del juego y cierra la aplicación
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
             SaveGameData();
             Application.Quit();
@@ -52,24 +53,24 @@ public class GameManager : MonoBehaviour
 
     public void SaveGameData()
     {
-        playerData.position = GetPlayerPosition();//Obtiene la posición del jugador
-        playerData.inventory = inventory.GetInventoryData();  //Obtiene los datos del inventario
-        playerData.decisions = decisionManager.GetDecisionData(); //Obtiene las decisiones tomadas por el jugador
+        playerData.position = GetPlayerPosition();
+        playerData.inventory = inventory.GetInventoryData();
+        playerData.decisions = decisionManager.GetDecisionData();
 
-        SaveLoadManager.currentSaveData = playerData; //Guarda los datos del jugador en la clase SaveLoadManager
+        SaveLoadManager.currentSaveData = playerData;
         SaveLoadManager.Save();
     }
 
     public void LoadGameData()
     {
-        SaveLoadManager.Load(); //Carga los datos del archivo de guardado
-        playerData = SaveLoadManager.currentSaveData; //Obtiene los datos del jugador SaveLoadManager
+        SaveLoadManager.Load();
+        inventory.SetInventoryData(playerData.inventory);
 
-        inventory.SetInventoryData(playerData.inventory, null); //Establece los datos del inventario
-        DecisionManager.SetDecisionData(playerData.decisions); //Establece las decisiones tomadas por el jugador
-        if (playerData.position != null) //Si se tienen los datos de la posición del jugador
+        decisionManager.SetDecisionData(playerData.decisions);
+
+        if (playerData.position != Vector3.zero) //Modificar la comparación
         {
-            SetPlayerPosition(playerData.position); //Establece la posición del jugador
+            SetPlayerPosition(playerData.position);
         }
     }
 
@@ -115,21 +116,20 @@ public class GameManager : MonoBehaviour
 
     public void StartAction(string actionID)
     {
-        actionManager.StartAction(actionID);
-    }
-
-    public void StartAction(Action action)
-    {
-        // Descontar los recursos necesarios para la acción del inventario del jugador
-        if (action.cost != null)
+        Action action = actionManager.GetAction(actionID);
+        if (action != null && CanAffordAction(action))
         {
-            inventory.RemoveResources(action.cost);
+            action.startAction();
         }
-
-        // Marcar la acción como iniciada en el DecisionManager
-        decisionManager.MakeDecision(action.actionID);
-
-        // Iniciar la acción
-        StartCoroutine(action.StartAction());
     }
+
+    private bool CanAffordAction(Action action)
+    {
+        if (action.cost == null)
+        {
+            return true;
+        }
+        return inventory.HasResources(action.cost);
+    }
+
 }

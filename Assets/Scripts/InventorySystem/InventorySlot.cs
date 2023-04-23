@@ -7,8 +7,40 @@ using UnityEngine.UI;
 public class InventorySlot
 {
     public Item item;
+    public Image icon;
     public GameObject slotUI;
+    public Button removeButton;
+    public Inventory inventory;
+    public void AddItem(Item newItem)
+    {
+        item = newItem;
 
+        icon.sprite = item.itemIcon;
+        icon.enabled = true;
+        removeButton.interactable = true;
+    }
+
+    public void ClearSlot()
+    {
+        item = null;
+
+        icon.sprite = null;
+        icon.enabled = false;
+        removeButton.interactable = false;
+    }
+
+    public void OnRemoveButton()
+    {
+        inventory.RemoveItem(item);
+    }
+
+    public void UseItem()
+    {
+        if (item != null)
+        {
+            item.Use();
+        }
+    }
     public void UpdateSlotUI()
     {
         // actualizar la interfaz de usuario de la ranura de inventario

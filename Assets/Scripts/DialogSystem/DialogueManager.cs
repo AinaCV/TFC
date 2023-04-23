@@ -8,7 +8,7 @@ public class DialogueManager : MonoBehaviour
 {
     public GameObject dialogueBox;
     public TextMeshProUGUI characterNameText;
-    public TextMeshProUGUI dialogText;
+    public TextMeshProUGUI dialogueText;
     public float textDelay = 0.1f;
     public float dialogDelay = 1f;
     public GameObject dialogPanel;
@@ -29,12 +29,13 @@ public class DialogueManager : MonoBehaviour
         {
             dialogDictionary.Add(dialogData.dialogID, dialogData);
         }
+        dialogueBox.SetActive(false);
     }
 
     public void StartDialogue(string dialogue)
     {
         dialogueBox.SetActive(true);
-        dialogText.text = dialogue;
+        dialogueText.text = dialogue;
     }
 
     public void EndDialogue()
@@ -59,7 +60,7 @@ public class DialogueManager : MonoBehaviour
 
         DialogData dialog = dialogQueue.Dequeue();
         characterNameText.text = dialog.characterName;
-        dialogText.text = "";
+        dialogueText.text = "";
 
         if (currentCoroutine != null)
         {
@@ -73,7 +74,7 @@ public class DialogueManager : MonoBehaviour
     {
         foreach (char c in text)
         {
-            dialogText.text += c;
+            dialogueText.text += c;
             yield return new WaitForSeconds(textDelay);
         }
 
@@ -82,37 +83,59 @@ public class DialogueManager : MonoBehaviour
         ShowNextDialogue();
     }
 
-    public void ShowDialogue(string dialogID)
+    private void Update()
     {
-        DialogData dialogData = dialogDictionary[dialogID];
-
-        if (dialogData != null)
+        if (Input.GetKeyDown(KeyCode.Space) && dialogueBox.activeSelf)
         {
-            if (dialogPanel != null)
-            {
-                dialogPanel.SetActive(true);
-                characterNameText.text = dialogData.characterName;
-                dialogText.text = dialogData.dialogText;
-            }
-            else
-            {
-                Debug.LogWarning("DialogPanel is not set.");
-            }
-
-            if (dialogData.isPlayer)
-            {
-                dialogTextInputField.gameObject.SetActive(true);
-                dialogTextInputField.text = dialogData.dialogText;
-                GameManager.Instance.StartAction(new ForestAction(dialogData.dialogID));
-            }
-            else
-            {
-                dialogTextInputField.gameObject.SetActive(false);
-            }
-        }
-        else
-        {
-            Debug.LogWarning("DialogData not found for ID: " + dialogID);
+            HideDialogue();
         }
     }
+
+    public void ShowDialogue(string dialogID)
+    {
+        dialogueBox.SetActive(true);
+        dialogue = DialogueDatabase.GetDialogueByID(dialogID);
+        dialogueText.text = dialogue;
+    }
+
+    public void HideDialogue()
+    {
+        dialogueBox.SetActive(false);
+        dialogue = "";
+        dialogueText.text = "";
+    }
+
+    //public void ShowDialogue(string dialogID)
+    //{
+    //    DialogData dialogData = dialogDictionary[dialogID];
+
+    //    if (dialogData != null)
+    //    {
+    //        if (dialogPanel != null)
+    //        {
+    //            dialogPanel.SetActive(true);
+    //            characterNameText.text = dialogData.characterName;
+    //            dialogText.text = dialogData.dialogText;
+    //        }
+    //        else
+    //        {
+    //            Debug.LogWarning("DialogPanel is not set.");
+    //        }
+
+    //        if (dialogData.isPlayer)
+    //        {
+    //            dialogTextInputField.gameObject.SetActive(true);
+    //            dialogTextInputField.text = dialogData.dialogText;
+    //            GameManager.Instance.StartAction(new ForestAction(dialogData.dialogID));
+    //        }
+    //        else
+    //        {
+    //            dialogTextInputField.gameObject.SetActive(false);
+    //        }
+    //    }
+    //    else
+    //    {
+    //        Debug.LogWarning("DialogData not found for ID: " + dialogID);
+    //    }
+    //}
 }
