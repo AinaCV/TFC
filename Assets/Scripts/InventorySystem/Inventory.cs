@@ -2,22 +2,41 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Inventory : MonoBehaviour
+[System.Serializable]
+public class Inventory
 {
-    public List<string> items = new List<string>();
+    public List<Item> items = new List<Item>();
 
-    public void AddItem(string item)
+    public void AddItem(Item item)
     {
         items.Add(item);
     }
 
-    public void RemoveItem(string item)
+    public void RemoveItem(Item item)
     {
         items.Remove(item);
     }
 
-    public bool HasItem(string item)
+    public bool HasItem(Item item)
     {
         return items.Contains(item);
+    }
+
+    public int GetItemCount(Item item)
+    {
+        int count = 0;
+        for (int i = 0; i < items.Count; i++)
+        {
+            if (items[i] == item)
+            {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public void Clear()
+    {
+        items.Clear();
     }
 }

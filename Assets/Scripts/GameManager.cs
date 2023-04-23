@@ -1,155 +1,114 @@
 using System.Collections;
 using System.Collections.Generic;
+using SaveLoadSystem;
 using UnityEngine;
-using UnityEngine.UI;
+using UnityEngine.SceneManagement;
+
 
 public class GameManager : MonoBehaviour
 {
     public static GameManager instance;
 
-    // Variables para el manejo de inventario
-    public List<Item> inventory = new List<Item>();
-    public Text inventoryText;
+    [Header("Player Data")]
+    public PlayerData playerData;
 
-    // Variables para el manejo de diálogos
-    public Text dialogueText;
-    public GameObject dialogueBox;
-    public bool dialogueActive;
-    public string[] dialogueLines;
-    public int currentLine;
-    public bool canMove;
-    public bool choicesActive;
-    public string[] choices;
-    public int selectedChoice;
+    [Header("Inventory")]
+    public Inventory inventory;
 
-    // Variables para el guardado y carga de datos
-    private string SAVE_FILE_NAME = "data.json";
-    [System.Serializable]
-    private struct SaveData
+    [Header("Decision Manager")]
+    public DecisionManager decisionManager = new DecisionManager();
+
+    [Header("Dialog Manager")]
+    public DialogManager dialogManager;
+
+    private void Awake()
     {
-        public List<Item> inventory;
-        public int currentLine;
-        public bool canMove;
-    }
-
-    void Awake()
-    {
-        // Singleton pattern para GameManager
         if (instance == null)
         {
             instance = this;
-            DontDestroyOnLoad(gameObject);
+            DontDestroyOnLoad(this.gameObject);
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(this.gameObject);
         }
     }
 
-    void Start()
+    private void Start()
     {
-        // Cargar los datos guardados
-        LoadData();
+        LoadGameData();
     }
 
-    void Update()
+    private void Update()
     {
-        // Abrir el diálogo si está activo
-        if (dialogueActive && Input.GetKeyDown(KeyCode.Space))
+        if (Input.GetKeyDown(KeyCode.Escape))
         {
-            if (choicesActive)
-            {
-                ChooseOption();
-            }
-            else
-            {
-                ContinueDialogue();
-            }
+            SaveGameData();
+            Application.Quit();
         }
     }
 
-    public void AddItem(Item newItem)
+    public void SaveGameData()
     {
-        // Añadir item al inventario
-        inventory.Add(newItem);
-        UpdateInventoryText();
+        playerData.position = GetPlayerPosition();
+        playerData.inventoryData = inventory.GetInventoryData();
+        playerData.decisionData = decisionManager.GetDecisionData();
+
+        SaveGameManager.currentSaveData = playerData;
+        SaveGameManager.Save();
     }
 
-    public void RemoveItem(Item itemToRemove)
+    public void LoadGameData()
     {
-        // Quitar item del inventario
-        inventory.Remove(itemToRemove);
-        UpdateInventoryText();
-    }
+        SaveGameManager.Load();
+        playerData = SaveGameManager.currentSaveData;
 
-    private void UpdateInventoryText()
-    {
-        // Actualizar texto del inventario
-        string inventoryString = "";
-        foreach (Item item in inventory)
+        inventory.SetInventoryData(playerData.inventoryData);
+        decisionManager.SetDecisionData(playerData.decisionData);
+
+        if (playerData.position != null)
         {
-            inventoryString += item.name + "\n";
+            SetPlayerPosition(playerData.position);
         }
-        inventoryText.text = inventoryString;
     }
 
-    public void StartDialogue(string[] lines)
+    private Vector3 GetPlayerPosition()
     {
-        // Iniciar diálogo
-        dialogueActive = true;
-        dialogueLines = lines;
-        currentLine = 0;
-        dialogueBox.SetActive(true);
-        canMove = false;
-        ContinueDialogue();
-    }
-
-    public void ContinueDialogue()
-    {
-        // Continuar diálogo
-        if (currentLine < dialogueLines.Length)
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
         {
-            dialogueText.text = dialogueLines[currentLine];
-            currentLine++;
+            return player.transform.position;
         }
-        else
+        return Vector3.zero;
+    }
+
+    private void SetPlayerPosition(Vector3 position)
+    {
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
         {
-            EndDialogue();
+            player.transform.position = position;
         }
     }
 
-    public void EndDialogue()
+    public void StartNewGame()
     {
-        // Finalizar diálogo
-        dialogueActive = false;
-        dialogueBox.SetActive(false);
-        canMove = true;
+        playerData = new PlayerData();
+        inventory.ResetInventory();
+        decisionManager.ResetDecisions();
+        SaveGameManager.currentSaveData = playerData;
+        SaveGameManager.Save();
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void ChooseOption()
+    public void EndGame()
     {
-        // Seleccionar opción
-        for (int i = 0; i < choices.Length; i++)
-        {
-            if (i == selectedChoice)
-            {
-                dialogueLines = choices[i].Split(';');
-                currentLine = 0;
-                choicesActive = false;
-                ContinueDialogue();
-            }
-        }
+        SaveGameData();
+        Application.Quit();
     }
 
-    public void SaveData()
+    public void ShowDialog(string dialogID)
     {
-        // Guardar datos
-        SaveData saveData = new SaveData();
-        saveData.inventory = inventory;
-        saveData.currentLine = currentLine;
-        saveData.canMove = canMove;
-
-        string json = JsonUtility.ToJson(saveData);
-
+        dialogManager.ShowDialog(dialogID);
     }
 }

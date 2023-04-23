@@ -1,31 +1,42 @@
+using System.Collections.Generic;
 using System.IO;
 using UnityEngine;
 
-public static class SaveLoadManager
+namespace SaveLoadSystem
 {
-    public static void SaveGameData(GameData gameData)
+    public static class SaveLoadSystem
     {
-        string jsonData = JsonUtility.ToJson(gameData);
-        string savePath = Application.persistentDataPath + "/gameData.json";
-        File.WriteAllText(savePath, jsonData);
-        Debug.Log("Game data saved!");
-    }
+        public static PlayerData currentSaveData = new PlayerData();
+        public const string SaveDirectory = "/SaveData";
+        public const string fileName = "/SaveGame.txt";
 
-    public static GameData LoadGameData()
-    {
-        string savePath = Application.persistentDataPath + "/gameData.json";
-        if (File.Exists(savePath))
+        public static bool Save()
         {
-            string jsonData = File.ReadAllText(savePath);
-            GameData gameData = JsonUtility.FromJson<GameData>(jsonData);
-            Debug.Log("Game data loaded!");
-            return gameData;
+            string dir = Application.persistentDataPath + SaveDirectory;
+            if (!Directory.Exists(dir))
+                Directory.CreateDirectory(dir);
+            string json = JsonUtility.ToJson(currentSaveData, true);
+
+            File.WriteAllText(dir + fileName, json);
+
+            GUIUtility.systemCopyBuffer = dir;
+            return true;
         }
-        else
+
+        public static bool Load()
         {
-            Debug.LogWarning("No game data found.");
-            return null;
+            string fullPath = Application.persistentDataPath + SaveDirectory + fileName;
+            if (File.Exists(fullPath))
+            {
+                string json = File.ReadAllText(fullPath);
+                currentSaveData = JsonUtility.FromJson<PlayerData>(json);
+                return true;
+            }
+            else
+            {
+                Debug.LogError("Save file not found.");
+                return false;
+            }
         }
     }
 }
-
