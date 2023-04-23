@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
-    public static GameManager instance; // Instancia única del GameManager
+    public static GameManager instance;
 
     [Header("Player Data")]
     public PlayerData playerData;
@@ -18,7 +18,10 @@ public class GameManager : MonoBehaviour
     public DecisionManager decisionManager = new DecisionManager();
 
     [Header("Dialog Manager")]
-    public DialogManager dialogManager;
+    public DialogueManager dialogueManager;
+
+    [Header("Action Manager")]
+    public Action actionManager;
 
     private void Awake()
     {
@@ -73,19 +76,19 @@ public class GameManager : MonoBehaviour
     private Vector3 GetPlayerPosition()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
-        if (player != null) 
+        if (player != null)
         {
-            return player.transform.position; 
+            return player.transform.position;
         }
-        return Vector3.zero; 
+        return Vector3.zero;
     }
 
     private void SetPlayerPosition(Vector3 position)
     {
-        GameObject player = GameObject.FindGameObjectWithTag("Player"); 
-        if (player != null) 
+        GameObject player = GameObject.FindGameObjectWithTag("Player");
+        if (player != null)
         {
-            player.transform.position = position; 
+            player.transform.position = position;
         }
     }
 
@@ -105,8 +108,28 @@ public class GameManager : MonoBehaviour
         Application.Quit();
     }
 
-    public void ShowDialog(string dialogID)
+    public void ShowDialogue(string dialogID)
     {
-        dialogManager.ShowDialog(dialogID);
+        dialogueManager.ShowDialogue(dialogID);
+    }
+
+    public void StartAction(string actionID)
+    {
+        actionManager.StartAction(actionID);
+    }
+
+    public void StartAction(Action action)
+    {
+        // Descontar los recursos necesarios para la acción del inventario del jugador
+        if (action.cost != null)
+        {
+            inventory.RemoveResources(action.cost);
+        }
+
+        // Marcar la acción como iniciada en el DecisionManager
+        decisionManager.MakeDecision(action.actionID);
+
+        // Iniciar la acción
+        StartCoroutine(action.StartAction());
     }
 }

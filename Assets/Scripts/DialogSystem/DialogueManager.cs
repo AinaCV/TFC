@@ -2,9 +2,11 @@ using System.Collections;
 using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
-public class DialogManager : MonoBehaviour
+public class DialogueManager : MonoBehaviour
 {
+    public GameObject dialogueBox;
     public TextMeshProUGUI characterNameText;
     public TextMeshProUGUI dialogText;
     public float textDelay = 0.1f;
@@ -21,11 +23,6 @@ public class DialogManager : MonoBehaviour
 
     private void Awake()
     {
-        // Inicializar la lista dialogList
-        List<DialogData> dialogList = new List<DialogData>();
-
-        // Agregar datos de diálogo a la lista dialogList
-
         // Crear el diccionario dialogDictionary y poblarlo con los datos de diálogo
         dialogDictionary = new Dictionary<string, DialogData>();
         foreach (DialogData dialogData in dialogList)
@@ -34,8 +31,18 @@ public class DialogManager : MonoBehaviour
         }
     }
 
+    public void StartDialogue(string dialogue)
+    {
+        dialogueBox.SetActive(true);
+        dialogText.text = dialogue;
+    }
 
-    public void AddDialog(string characterName, string dialogText) //Agrega un diálogo a la cola
+    public void EndDialogue()
+    {
+        dialogueBox.SetActive(false);
+    }
+
+    public void AddDialogue(string characterName, string dialogText)
     {
         DialogData dialog = new DialogData();
         dialog.characterName = characterName;
@@ -43,7 +50,7 @@ public class DialogManager : MonoBehaviour
         dialogQueue.Enqueue(dialog);
     }
 
-    public void ShowNextDialog() //Muestra el siguiente diálogo en la cola
+    public void ShowNextDialogue()
     {
         if (dialogQueue.Count == 0)
         {
@@ -62,7 +69,7 @@ public class DialogManager : MonoBehaviour
         currentCoroutine = StartCoroutine(TypeText(dialog.dialogText));
     }
 
-    IEnumerator TypeText(string text)    //Escribe el texto letra por letra con un pequeño retraso entre cada letra
+    IEnumerator TypeText(string text)
     {
         foreach (char c in text)
         {
@@ -72,10 +79,10 @@ public class DialogManager : MonoBehaviour
 
         yield return new WaitForSeconds(dialogDelay);
 
-        ShowNextDialog();
+        ShowNextDialogue();
     }
 
-    public void ShowDialog(string dialogID)    //Muestra un diálogo según su ID
+    public void ShowDialogue(string dialogID)
     {
         DialogData dialogData = dialogDictionary[dialogID];
 
@@ -94,13 +101,12 @@ public class DialogManager : MonoBehaviour
 
             if (dialogData.isPlayer)
             {
-                //characterNameText.text = GameManager.instance.playerData.characterName;
                 dialogTextInputField.gameObject.SetActive(true);
                 dialogTextInputField.text = dialogData.dialogText;
+                GameManager.Instance.StartAction(new ForestAction(dialogData.dialogID));
             }
             else
             {
-                characterNameText.text = dialogData.characterName;
                 dialogTextInputField.gameObject.SetActive(false);
             }
         }

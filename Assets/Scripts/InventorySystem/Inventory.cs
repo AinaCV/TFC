@@ -40,6 +40,10 @@ public class Inventory
     {
         items.Clear();
     }
+    public bool Contains(Item item)
+    {
+        return items.Contains(item);
+    }
 
     public List<string> GetInventoryData() // Obtiene los datos del inventario en forma de una lista de strings
     {

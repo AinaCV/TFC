@@ -5,83 +5,50 @@ using UnityEngine.UI;
 
 public class NPC : MonoBehaviour
 {
-    public GameObject dialoguePanel;
-    public Text dialogueText;
-    public string[] dialogue;
-    private int index;
+    public Inventory inventory;
+    public Item requiredItem;
+    public Item rewardItem;
+    public DialogueManager dialogueManager;
 
-    public GameObject contButton;
-    public float wordSpeed;
-    public bool playerIsClose;
-
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.E) && playerIsClose ||  Input.GetMouseButtonDown(0) && playerIsClose)
-        {
-            if(dialoguePanel.activeInHierarchy)
-            {
-                NextLine(); 
-            }
-            else
-            {
-                dialoguePanel.SetActive(true);
-                StartCoroutine(Typing());
-            }
-        }
-
-        if (dialogueText.text == dialogue[index])
-        {
-            contButton.SetActive(true);
-        }
-    }
-
-    public void zeroText()
-    {
-        dialogueText.text = "";
-        index = 0;
-        dialoguePanel.SetActive(false);
-    }
-
-    IEnumerator Typing() //para que aparezca el dialogo a una velocidad de escritura normal
-    {
-        foreach(char letter in dialogue[index].ToCharArray())
-        {
-            dialogueText.text += letter;
-            yield return new WaitForSeconds(wordSpeed);
-        }
-    }
-
-    public void NextLine()
-    {
-        contButton.SetActive(false);
-        StopAllCoroutines(); //Para bug en corrutinas de ambos textos a la vez
-
-        if(index < dialogue.Length - 1)
-        {
-            index++;
-            dialogueText.text = "";
-            StartCoroutine(Typing());
-        }
-        else
-        {
-            zeroText();
-        }
-    }
+    private bool hasRequestedItem = false;
+    private bool hasGivenReward = false;
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player"))
         {
-            playerIsClose = true;
+            if (hasGivenReward)
+            {
+                dialogueManager.StartDialogue("¡Gracias por tu ayuda anterior! No necesito nada más por ahora.");
+            }
+            else if (hasRequestedItem)
+            {
+                if (inventory.Contains(requiredItem))
+                {
+                    inventory.RemoveItem(requiredItem);
+                    inventory.AddItem(rewardItem);
+                    dialogueManager.StartDialogue("¡Gracias! Aquí tienes tu recompensa.");
+                    hasGivenReward = true;
+                }
+                else
+                {
+                    dialogueManager.StartDialogue("¿Tienes algo que pueda interesarme? Necesito un " + requiredItem.itemName + ".");
+                }
+            }
+            else
+            {
+                dialogueManager.StartDialogue("¡Hola! ¿Cómo estás?");
+            }
         }
     }
 
+    //private void OnTriggerStay(Collider other)
+    //{
+    //    // Repetir la lógica del OnTriggerEnter() para que el diálogo se actualice mientras el jugador está cerca del NPC
+    //}
+
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
-        {
-            playerIsClose = false;
-            zeroText();
-        }
+        dialogueManager.EndDialogue();
     }
 }

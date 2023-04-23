@@ -9,6 +9,6 @@ public class StaminaBar : MonoBehaviour
 
     private void Update()
     {
-        staminaBar.fillAmount = (float)PlayerController.Instance.stamina / (float)PlayerController.Instance.maxStamina;
+        staminaBar.fillAmount = (float)Player.Instance.stamina / (float)Player.Instance.maxStamina;
     }
 }

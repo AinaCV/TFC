@@ -14,6 +14,6 @@ public class Action : DecisionTreeNode
     {
         if (!activated)
             return;
-        // Implememntar los comportamientos a continuación :D
+        // Implememntar los comportamientos aquí :D
     }
 }

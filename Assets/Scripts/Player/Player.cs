@@ -22,11 +22,11 @@ public class Player : MonoBehaviour
     public bool isWalking = false;
    
 
-    public static Player instance; //tiene que ser static para la health y stamina bar
+    public static Player Instance; //tiene que ser static para la health y stamina bar
 
     void Awake()
     {
-        instance = this;
+        Instance = this;
     }
 
     private void Start()
