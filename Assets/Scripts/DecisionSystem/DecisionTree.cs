@@ -2,24 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class DecisionTree : DecisionTreeNode
+public class DecisionTree : MonoBehaviour
 {
     public DecisionTreeNode root;
-    private Action newAction;
-    private Action oldAction;
 
-    public override DecisionTreeNode MakeDecision() //overrride la función MakeDecision
+    private void Start()
     {
-        return root.MakeDecision();
+        MakeDecisions();
     }
 
-    void Update()
+    private void MakeDecisions()
     {
-        newAction.activated = false;
-        oldAction = newAction;
-        newAction = root.MakeDecision() as Action;
-        if (newAction == null)
-            newAction = oldAction;
-        newAction.activated = true;
+        DecisionTreeNode current = root;
+        while (current != null)
+        {
+            current = current.MakeDecision();
+        }
     }
 }

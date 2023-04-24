@@ -1,21 +1,26 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Decision : DecisionTreeNode
 {
-    public Action nodeTrue;
-    public Action nodeFalse;
+    public string decisionPrompt;
+    public string trueText;
+    public string falseText;
+    public DecisionTreeNode trueNode;
+    public DecisionTreeNode falseNode;
+
     public override DecisionTreeNode MakeDecision()
     {
-        Action selectedNode = GetBranch();
-        if (selectedNode == null)
-            return null;
-        return selectedNode.MakeDecision();
+        Debug.Log(decisionPrompt);
+        bool choice = UnityEngine.Random.value > 0.5f;
+        Debug.Log(choice ? trueText : falseText);
+        return choice ? trueNode : falseNode;
     }
-
-    public virtual Action GetBranch() //al contrario de abstract, virtual se implementa y tiene la opción se sobreescribir las clases que heredan de este metodo
+    protected override DecisionTreeNode GetBranch()
     {
-        return null;
+        bool choice = UnityEngine.Random.value > 0.5f;
+        return choice ? trueNode : falseNode;
     }
 }

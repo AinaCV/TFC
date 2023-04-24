@@ -6,7 +6,7 @@ public class Action : DecisionTreeNode
 {
     public bool activated = false;
     private List<Action> _actions;
-    private string _ID; // cambiar el nombre de la variable a _ID para seguir la convención de nombres
+    private string _ID;
 
     public override DecisionTreeNode MakeDecision()
     {
@@ -17,20 +17,20 @@ public class Action : DecisionTreeNode
     {
         if (!activated)
             return;
-        // Implementar los comportamientos aquí :D
+        // Implementa los comportamientos aquí :D
     }
 
-    public Action(List<Action> actions, string ID) // agregar el parámetro ID en el constructor
+    public Action(List<Action> actions, string ID)
     {
         _actions = actions;
-        _ID = ID; // asignar el valor del parámetro ID a la variable de clase correspondiente
+        _ID = ID;
     }
 
     public Action GetAction(string actionID)
     {
         foreach (Action action in _actions)
         {
-            if (action._ID == actionID) // acceder a la variable _ID de la acción actual en la iteración
+            if (action._ID == actionID)
             {
                 return action;
             }
