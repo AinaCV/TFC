@@ -27,7 +27,7 @@ public class DialogueManager : MonoBehaviour
         dialogDictionary = new Dictionary<string, DialogData>();
         foreach (DialogData dialogData in dialogList)
         {
-            dialogDictionary.Add(dialogData.dialogID, dialogData);
+            dialogDictionary.Add(dialogData.dialogID, dialogData); //Replace the ellipsis with dialogData
         }
         dialogueBox.SetActive(false);
     }

@@ -50,7 +50,6 @@ public class GameManager : MonoBehaviour
             Application.Quit();
         }
     }
-
     public void SaveGameData()
     {
         playerData.position = GetPlayerPosition();
@@ -73,7 +72,6 @@ public class GameManager : MonoBehaviour
             SetPlayerPosition(playerData.position);
         }
     }
-
     private Vector3 GetPlayerPosition()
     {
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -92,7 +90,6 @@ public class GameManager : MonoBehaviour
             player.transform.position = position;
         }
     }
-
     public void StartNewGame()
     {
         playerData = new PlayerData(); //Crea nuevos datos del jugador
@@ -119,7 +116,7 @@ public class GameManager : MonoBehaviour
         Action action = actionManager.GetAction(actionID);
         if (action != null && CanAffordAction(action))
         {
-            action.startAction();
+            action.StartAction();
         }
     }
 
