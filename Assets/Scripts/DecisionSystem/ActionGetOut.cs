@@ -17,4 +17,3 @@ public class ActionExplorarCasa : Action
         Console.WriteLine("Estás explorando la cabaña.");
     }
 }
-}
