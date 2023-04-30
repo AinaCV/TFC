@@ -80,8 +80,8 @@ BlendTree:
     m_CycleOffset: 0
     m_DirectBlendParameter: Blend
     m_Mirror: 0
-  m_BlendParameter: Velocity Z
-  m_BlendParameterY: Velocity X
+  m_BlendParameter: Velocity X
+  m_BlendParameterY: Velocity Z
   m_MinThreshold: 0
   m_MaxThreshold: 0.6666667
   m_UseAutomaticThresholds: 1
