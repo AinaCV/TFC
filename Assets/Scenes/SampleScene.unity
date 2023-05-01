@@ -10810,7 +10810,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 79945227650c28a40af74410e53370e8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  player: {fileID: 0}
+  player: {fileID: 827704411}
   mouseSens: 200
   maxY: 20
   minY: -10
