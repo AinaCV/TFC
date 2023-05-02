@@ -20,7 +20,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: NPC
+  m_Name: NPC_Head
   m_Shader: {fileID: -6465566751694194690, guid: 6e196925e243cce498f6207da7a1bcc7,
     type: 3}
   m_ValidKeywords: []
@@ -63,7 +63,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_Texture:
-        m_Texture: {fileID: 2800000, guid: 35c17e2981a6b85418b002300c210bbb, type: 3}
+        m_Texture: {fileID: 2800000, guid: a19e603f7295b50499c72cb9015ae0c8, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Mask:
@@ -120,8 +120,8 @@ Material:
     - _QueueControl: 0
     - _QueueOffset: 0
     - _ReceiveShadows: 1
-    - _RimPower: 1.11
-    - _Rim_Light_Brightness: 2.96
+    - _RimPower: 1.18
+    - _Rim_Light_Brightness: 0.35
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
