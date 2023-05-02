@@ -7,7 +7,7 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: Rock
+  m_Name: Rock_04
   m_Shader: {fileID: -6465566751694194690, guid: 6e196925e243cce498f6207da7a1bcc7,
     type: 3}
   m_ValidKeywords: []
@@ -50,7 +50,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Main_Texture:
-        m_Texture: {fileID: 2800000, guid: 6740fad2435408e46969b043c044e16b, type: 3}
+        m_Texture: {fileID: 2800000, guid: 18f17932707b4ea4c832dfd8b8ecc537, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _Mask:
@@ -108,14 +108,14 @@ Material:
     - _QueueOffset: 0
     - _ReceiveShadows: 1
     - _RimPower: 1.06
-    - _Rim_Light_Brightness: 1.97
+    - _Rim_Light_Brightness: 2.31
     - _Smoothness: 0.5
     - _SmoothnessTextureChannel: 0
     - _SpecularHighlights: 1
     - _SrcBlend: 1
     - _Surface: 0
     - _ToonRampOffset: 0.59
-    - _ToonRampTiling: 0.04
+    - _ToonRampTiling: 0
     - _WorkflowMode: 1
     - _ZWrite: 1
     m_Colors:
