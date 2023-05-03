@@ -9,10 +9,10 @@ public class Action : DecisionTreeNode
     private List<Action> _actions;
     private string _ID;
 
-    //public override DecisionTreeNode MakeDecision()
-    //{
-    //    return this;
-    //}
+    public override DecisionTreeNode MakeDecision()
+    {
+        return this;
+    }
 
     public virtual void LateUpdate()
     {

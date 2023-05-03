@@ -12,13 +12,13 @@ public class Decision : DecisionTreeNode
     public DecisionTreeNode trueNode;
     public DecisionTreeNode falseNode;
 
-    //public override DecisionTreeNode MakeDecision()
-    //{
-    //    Debug.Log(decisionPrompt);
-    //    bool choice = UnityEngine.Random.value > 0.5f;
-    //    Debug.Log(choice ? trueText : falseText);
-    //    return choice ? trueNode : falseNode;
-    //}
+    public override DecisionTreeNode MakeDecision()
+    {
+        Debug.Log(decisionPrompt);
+        bool choice = UnityEngine.Random.value > 0.5f;
+        Debug.Log(choice ? trueText : falseText);
+        return choice ? trueNode : falseNode;
+    }
 
     protected override DecisionTreeNode GetBranch()
     {
