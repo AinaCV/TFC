@@ -30,6 +30,8 @@ public class DialogueManager : MonoBehaviour
 
     private Coroutine displayTextCoroutine;
 
+    private DialogueVariables dialogueVar;
+
     private static DialogueManager instance;
 
     private void Awake()
@@ -39,6 +41,8 @@ public class DialogueManager : MonoBehaviour
             Debug.LogWarning("Found more than one Dialogue Manager in the scene");
         }
         instance = this;
+
+        dialogueVar = new DialogueVariables();
     }
     public static DialogueManager GetInstance()
     {
@@ -78,11 +82,15 @@ public class DialogueManager : MonoBehaviour
         dialogueIsPlaying = true;
         dialoguePanel.SetActive(true);
 
+        dialogueVar.StartListening(currentStory);
+
         ContinueStory();
     }
 
     void ExitDialogueMode()
     {
+        dialogueVar.StopListening(currentStory);
+
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
         dialogueText.text = ""; // dejamos el texto en un string vacia por si acaso
@@ -142,7 +150,7 @@ public class DialogueManager : MonoBehaviour
         //escribe letra por letra
         foreach (char letter in line.ToCharArray())
         {
-           if(Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.Space))
             {
                 dialogueText.text = line;
                 break;//para romper el loop si el player no quiere esperar a que termine 
