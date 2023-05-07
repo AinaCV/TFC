@@ -19,10 +19,10 @@ public class DialogueTrigger : MonoBehaviour
 
     private void Update()
     {
-        if (playerInTrigger)
+        if (playerInTrigger && !DialogueManager.GetInstance().dialogueIsPlaying)
         {
             visualCue.SetActive(true); //activamos el icono si está dentro del trigger
-            if (Input.GetKey(KeyCode.E))
+            if (Input.GetKeyDown(KeyCode.E))
             {
                 DialogueManager.GetInstance().EnterDialogueMode(inkJSON);
             }

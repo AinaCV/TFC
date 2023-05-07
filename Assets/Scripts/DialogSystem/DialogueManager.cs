@@ -13,7 +13,7 @@ public class DialogueManager : MonoBehaviour
 
     private Story currentStory; //using Ink.Runtime;
 
-    private bool dialogueIsPlaying;
+    public bool dialogueIsPlaying { get; private set; }//read only
 
     private static DialogueManager instance;
 
@@ -42,7 +42,7 @@ public class DialogueManager : MonoBehaviour
         {
             return;
         }
-        if (Input.GetKey(KeyCode.E))
+        if (Input.GetMouseButtonDown(0))
         {
             ContinueStory();
         }

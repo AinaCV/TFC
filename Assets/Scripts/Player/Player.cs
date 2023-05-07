@@ -20,7 +20,7 @@ public class Player : MonoBehaviour
     public bool isRegenerating = false;
     public bool isRunning = false;
     public bool isWalking = false;
-   
+
 
     public static Player Instance; //tiene que ser static para la health y stamina bar
 
@@ -39,6 +39,11 @@ public class Player : MonoBehaviour
 
     void Update()
     {
+        if (DialogueManager.GetInstance().dialogueIsPlaying)
+        {
+            return;
+        }
+
         if (stamina < maxStamina && isRegenerating)
         {
             stamina += Time.deltaTime;
