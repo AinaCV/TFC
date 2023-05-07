@@ -16,7 +16,6 @@ public class Player : MonoBehaviour
     public float recoverStamina;
     //Animator anim;
     [Header("Bools")]
-    //public bool attack;
     public bool isRegenerating = false;
     public bool isRunning = false;
     public bool isWalking = false;
@@ -41,6 +40,8 @@ public class Player : MonoBehaviour
     {
         if (DialogueManager.GetInstance().dialogueIsPlaying)
         {
+            //anim.GetComponent<AnimationController>();
+            //anim.Play("Idle");
             return;
         }
 
@@ -74,7 +75,6 @@ public class Player : MonoBehaviour
 
         Move();
         //Stamina();
-        //Attack();
         //Death();
     }
 
@@ -146,17 +146,6 @@ public class Player : MonoBehaviour
     //    }
     //}
 
-    //public void Attack() //que solo ataque si no hay menus por enmedio
-    //{
-    //    if (Input.GetMouseButton(0))
-    //    {
-    //        attack = true;
-    //    }
-    //    else
-    //    {
-    //        attack = false;
-    //    }
-    //}
 
     //private void Death()
     //{

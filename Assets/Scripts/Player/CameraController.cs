@@ -33,6 +33,15 @@ public class CameraController : MonoBehaviour
         {
             yRotation = minY;
         }
+
+        if (DialogueManager.GetInstance().dialogueIsPlaying)
+        {
+            Cursor.lockState = CursorLockMode.None; // para que aparezca el cursor en los dialogos
+        }
+        else
+        {
+            Cursor.lockState = CursorLockMode.Locked;
+        }
     }
 
     private void OnDestroy()

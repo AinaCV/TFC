@@ -11,14 +11,12 @@ public class AnimationController : MonoBehaviour
     public float deceleration = 2.0f;
     public float maxWalkVelocity = 0.5f;
     public float maxRunVelocity = 2.0f;
-    //float jumpTimer;
     float coolDown = 1f;
     //public float walkTimer;
     public float runTimer;
     //const float coolDownWalk = 1f;
     //const float coolDownRun = 1F;
 
-    //public AudioClip jump;
     //public AudioClip walk;
     //public AudioClip run;
 
@@ -29,22 +27,22 @@ public class AnimationController : MonoBehaviour
 
     void Update()
     {
+        if (DialogueManager.GetInstance().dialogueIsPlaying)
+        {
+            return;
+        }
+
         bool forwardPressed = Input.GetKey(KeyCode.W);
         bool leftPressed = Input.GetKey(KeyCode.A);
         bool righhtPressed = Input.GetKey(KeyCode.D);
         bool backwardsPressed = Input.GetKey(KeyCode.S);
         bool runPressed = Input.GetKey(KeyCode.LeftShift);
-        //bool jumpPressed = Input.GetKey(KeyCode.Space);
+       
         //Ternary operator
         float currentMaxVelocity = runPressed ? maxRunVelocity : maxWalkVelocity;// currentMaxVelocity es la maxRun o la maxWalk dependiendo se si pulsas shift 
                                                                                  //la primera opcion se cumple si pulso shift, si no, la segunda
 
         Animation(forwardPressed, leftPressed, righhtPressed, backwardsPressed, runPressed, currentMaxVelocity);
-
-        //if (jumpTimer > 0)
-        //{
-        //    jumpTimer -= Time.deltaTime;
-        //}
         //walkTimer -= Time.deltaTime;
     }
 
