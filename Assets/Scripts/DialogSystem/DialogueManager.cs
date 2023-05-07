@@ -3,21 +3,32 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using Ink.Runtime;
+using UnityEngine.EventSystems;
 
 public class DialogueManager : MonoBehaviour
 {
+    [Header("Parameters")]
+    [SerializeField] private float typingSpeed = 0.04f;
+
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
 
     [SerializeField] private TextMeshProUGUI dialogueText; //using TMPro;
 
+    [SerializeField] private GameObject continueIcon;
+
     [Header("Choices UI")]
     [SerializeField] private GameObject[] choices; //array de elecciones
+
     private TextMeshProUGUI[] choicesText; //array de cada texto para cada elección
 
     private Story currentStory; //using Ink.Runtime;
 
     public bool dialogueIsPlaying { get; private set; }//read only
+
+    public bool canContinueToNextLine = false;
+
+    private Coroutine displayTextCoroutine;
 
     private static DialogueManager instance;
 
@@ -55,7 +66,7 @@ public class DialogueManager : MonoBehaviour
         {
             return;
         }
-        if (Input.GetMouseButtonDown(0))
+        if (canContinueToNextLine && Input.GetMouseButtonDown(0))
         {
             ContinueStory();
         }
@@ -82,9 +93,13 @@ public class DialogueManager : MonoBehaviour
         if (currentStory.canContinue)
         {
             //set the text
-            dialogueText.text = currentStory.Continue();//nos da la siguiente linea de dialogo y además la quita de la lista de lineas que pueden salir en el dialogo
+            //dialogueText.text = currentStory.Continue();
+            if (displayTextCoroutine != null) //si ya esta en marcha para la corrutina para que no se vuelva loco el dialogo
+            {
+                StopCoroutine(displayTextCoroutine);
+            }
+            displayTextCoroutine = StartCoroutine(DisplayText(currentStory.Continue()));//siguiente linea de dialogo
             //Si hay elección el dialogo activo, display 
-            DisplayChoices();
         }
         else
         {
@@ -113,6 +128,55 @@ public class DialogueManager : MonoBehaviour
         for (int i = index; i < choices.Length; i++)
         {
             choices[i].gameObject.SetActive(false);
+        }
+    }
+
+    IEnumerator DisplayText(string line)
+    {
+        //vacia el texto del dialogo
+        dialogueText.text = "";
+        canContinueToNextLine = false;
+        continueIcon.SetActive(false);
+        HideChoices();
+
+        //escribe letra por letra
+        foreach (char letter in line.ToCharArray())
+        {
+           if(Input.GetKey(KeyCode.Space))
+            {
+                dialogueText.text = line;
+                break;//para romper el loop si el player no quiere esperar a que termine 
+            }
+
+            dialogueText.text += letter;
+            yield return new WaitForSeconds(typingSpeed);
+        }
+        canContinueToNextLine = true;
+        continueIcon.SetActive(true);
+        DisplayChoices();
+    }
+
+    void HideChoices()
+    {
+        foreach (GameObject choiceButton in choices)
+        {
+            choiceButton.SetActive(false);
+        }
+    }
+
+    private IEnumerator SelectFirtsChoise()
+    {
+        EventSystem.current.SetSelectedGameObject(null);
+        yield return new WaitForEndOfFrame();
+        EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
+    }
+
+    public void MakeChoice(int choiceIndex)
+    {
+        if (canContinueToNextLine)
+        {
+            currentStory.ChooseChoiceIndex(choiceIndex);
+            ContinueStory();
         }
     }
 }
