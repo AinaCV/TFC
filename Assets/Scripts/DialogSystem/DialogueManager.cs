@@ -10,6 +10,9 @@ public class DialogueManager : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] private float typingSpeed = 0.04f;
 
+    [Header("Load Globals JSON")]
+    [SerializeField] private TextAsset loadGlobalsJSON;
+
     [Header("Dialogue UI")]
     [SerializeField] private GameObject dialoguePanel;
 
@@ -42,7 +45,7 @@ public class DialogueManager : MonoBehaviour
         }
         instance = this;
 
-        dialogueVar = new DialogueVariables();
+        dialogueVar = new DialogueVariables(loadGlobalsJSON);
     }
     public static DialogueManager GetInstance()
     {
@@ -188,6 +191,25 @@ public class DialogueManager : MonoBehaviour
         {
             currentStory.ChooseChoiceIndex(choiceIndex);
             ContinueStory();
+        }
+    }
+
+    public Ink.Runtime.Object GetVariableState(string varName)
+    {
+        Ink.Runtime.Object varValue = null;
+        dialogueVar.var.TryGetValue(varName, out varValue);
+        if (varValue == null)
+        {
+            Debug.LogWarning("Ink Variable null:" + varName);
+        }
+        return varValue;
+    }
+
+    public void OnApplicationQuit()
+    {
+        if (dialogueVar != null)//check :)
+        {
+            dialogueVar.SaveVariables();
         }
     }
 }
