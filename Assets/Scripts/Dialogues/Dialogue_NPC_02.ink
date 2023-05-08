@@ -1,4 +1,4 @@
-VAR mainChoice =""
+INCLUDE Globals.ink
 -> main
 === main ===
 Hello
@@ -12,7 +12,7 @@ Give it to me, please, and I promise I will give you something as valuable as th
      If you give that treasure... You are welcome in.
         **[Ok, take it.]
         -> GiveMoonstone
-        **[It's really important to me, I'm noy giving it away.]
+        **[I'm noy giving it away.]
         -> DintGiveMoonstone
         
 === GiveMoonstone

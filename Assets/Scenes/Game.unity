@@ -19110,6 +19110,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   typingSpeed: 0.04
+  loadGlobalsJSON: {fileID: 4900000, guid: f698dc3c30f60084389012360fff531c, type: 3}
   dialoguePanel: {fileID: 317390617}
   dialogueText: {fileID: 1992436734}
   continueIcon: {fileID: 1402557111}
@@ -29068,7 +29069,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -77.177376, y: 0, z: -89.73623, w: 0}
+  m_margin: {x: -210.5907, y: 0, z: -215.82346, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -41988,8 +41989,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 0}
   m_AnchorMax: {x: 1, y: 0}
-  m_AnchoredPosition: {x: 364, y: -150}
-  m_SizeDelta: {x: 307, y: 114}
+  m_AnchoredPosition: {x: 258, y: -150}
+  m_SizeDelta: {x: 576, y: 114}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &881717926
 MonoBehaviour:
@@ -42067,7 +42068,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ca94c23b23fee7c4fac5487c44b84698, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c7f184acb9af0b54ba69237fa741ab9e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -42287,7 +42288,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: -83.241974, y: 0, z: -89.61466, w: 0}
+  m_margin: {x: -212.53139, y: 0, z: -217.83551, w: 0}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -63663,8 +63664,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: -364, y: -150}
-  m_SizeDelta: {x: 307, y: 114}
+  m_AnchoredPosition: {x: -258, y: -150}
+  m_SizeDelta: {x: 576, y: 114}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1343693938
 MonoBehaviour:
@@ -63742,7 +63743,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: ca94c23b23fee7c4fac5487c44b84698, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c7f184acb9af0b54ba69237fa741ab9e, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
