@@ -70,7 +70,7 @@ public class DialogueManager : MonoBehaviour
         {
             return;
         }
-        if (canContinueToNextLine && Input.GetMouseButtonDown(0))
+        if (currentStory.currentChoices.Count == 0 && canContinueToNextLine && Input.GetMouseButtonDown(0))
         {
             ContinueStory();
         }
@@ -87,10 +87,11 @@ public class DialogueManager : MonoBehaviour
         ContinueStory();
     }
 
-    void ExitDialogueMode()
+    IEnumerator ExitDialogueMode()//Es una corrutina porque comparte el imput con otras funciones, así hay un pequeño espacio de tiempo y no se solapan
     {
-        dialogueVar.StopListening(currentStory);
+        yield return new WaitForSeconds(0.2f);
 
+        dialogueVar.StopListening(currentStory);
         dialogueIsPlaying = false;
         dialoguePanel.SetActive(false);
         dialogueText.text = ""; // dejamos el texto en un string vacia por si acaso
@@ -111,7 +112,7 @@ public class DialogueManager : MonoBehaviour
         }
         else
         {
-            ExitDialogueMode();
+            StartCoroutine(ExitDialogueMode());
         }
     }
 
@@ -137,6 +138,8 @@ public class DialogueManager : MonoBehaviour
         {
             choices[i].gameObject.SetActive(false);
         }
+
+        StartCoroutine(SelectFirtsChoise());
     }
 
     IEnumerator DisplayText(string line)
@@ -172,14 +175,14 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    private IEnumerator SelectFirtsChoise()
+    private IEnumerator SelectFirtsChoise()    //Buscar alternativas, apaño pochillo para poder seleccionar las elecciones en los dialogos
     {
-        EventSystem.current.SetSelectedGameObject(null);
+        EventSystem.current.SetSelectedGameObject(null);//Limpiamos event system y esperamos un frame
         yield return new WaitForEndOfFrame();
-        EventSystem.current.SetSelectedGameObject(choices[0].gameObject);
+        EventSystem.current.SetSelectedGameObject(choices[0].gameObject);//seleccionamos una decision 
     }
 
-    public void MakeChoice(int choiceIndex)
+    public void MakeChoice(int choiceIndex)//Para los botones
     {
         if (canContinueToNextLine)
         {
