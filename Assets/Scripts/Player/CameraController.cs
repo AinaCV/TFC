@@ -9,6 +9,7 @@ public class CameraController : MonoBehaviour
     private float yRotation = 0f;
     public float maxY;
     public float minY;
+    //public GameObject followTransform;
 
     void Start()
     {
@@ -22,6 +23,9 @@ public class CameraController : MonoBehaviour
 
         yRotation -= mouseY; // el menos es importante
         transform.localRotation = Quaternion.Lerp(transform.localRotation, Quaternion.Euler(yRotation, 0, 0), 1f); //Lerp = interpolacion, euler es un vector normal
+        //var angles = followTransform.transform.localEulerAngles;
+        //transform.rotation = Quaternion.Euler(0, followTransform.transform.rotation.eulerAngles.y, 0);
+        //followTransform.transform.localEulerAngles = new Vector3(angles.x, 0, 0);
 
         player.transform.Rotate(Vector3.up * mouseX); //movimiento horizontal 
 
@@ -36,6 +40,7 @@ public class CameraController : MonoBehaviour
 
         if (DialogueManager.GetInstance().dialogueIsPlaying)
         {
+            transform.localRotation = transform.rotation;
             Cursor.lockState = CursorLockMode.None; // para que aparezca el cursor en los dialogos
         }
         else
